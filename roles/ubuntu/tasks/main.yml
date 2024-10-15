@@ -1,0 +1,30 @@
+---
+- name: Update apt package manager
+  apt:
+    update_cache: yes
+
+- name: Install Nagios and dependencies
+  apt:
+    name:
+      - nagios3-core
+      - nagios-plugins
+      - apache2
+      - libgd-dev
+      - libpng-dev
+      - libfreetype6-dev
+      - gcc
+      - libc6-dev
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Start and enable Nagios service 
+  systemd:
+    name: nagios3
+    enabled: yes
+    state: restarted
+
+- name: Start and enable Apache service
+  systemd:
+    name: apache2
+    enabled: yes
+    state: started
